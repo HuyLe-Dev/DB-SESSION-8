@@ -19,7 +19,12 @@ CREATE PROCEDURE sp_get_avg_salary()
 
 BEGIN 
   DECLARE v_avg_salary DECIMAL(15, 2);
-  SELECT AVG(salary)
-  FROM employees
+
+  SELECT AVG(salary) INTO v_avg_salary
+  FROM employees;
+
+  SELECT 'AVG salary of employees: ' AS Description, v_avg_salary AS Average_Salary;
 END //
 DELIMITER ;
+
+CALL sp_get_avg_salary();
