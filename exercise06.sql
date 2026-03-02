@@ -41,8 +41,10 @@ BEGIN
 END //
 
 DELIMITER ;
+--TEST
+CALL sp_classify_student(8.5, @xeploai);
 
-CALL sp_classify_student(10, "HUY");
+SELECT @xeploai AS "Kết quả xếp loại"; 
 
 --REMOVE PROCEDURE: 
 DROP PROCEDURE sp_classify_student;
