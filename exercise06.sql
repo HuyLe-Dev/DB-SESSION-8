@@ -15,21 +15,29 @@ INSERT INTO students (full_name, gpa) VALUES
 
 
 DELIMITER //
-  CREATE PROCEDURE sp_classify_student(
-    IN p_gpa DECIMAL(3, 1),
-    IN p_full_name VARCHAR(100)
-  )
-BEGIN
-  DECLARE v_classification VARCHAR(20);
-  IF p_gpa >= 8,5 THEN
-    SET v_classification = "GIOI";
-  ELSEIF p_gpa >= 6,5 AND p_gpa < 8 THEN
-    SET v_classification = "KHA";
-  ELSE 
-    SET v_classification = "YEU";
-  END IF;
 
-  SELECT p_full_name AS "TEN HOC SINH", v_classification AS "HOC LUC" , p_gpa AS "DIEM SO" ;
+CREATE PROCEDURE sp_classify_student(
+    IN p_avg_score DECIMAL(4, 2), 
+    OUT p_rank VARCHAR(20)  
+)
+BEGIN
+    DECLARE v_result VARCHAR(20);
+
+    -- Sử dụng cấu trúc CASE để kiểm tra điều kiện
+    CASE
+        WHEN p_avg_score >= 8.0 THEN 
+            SET v_result = 'Giỏi';
+        WHEN p_avg_score >= 6.5 THEN 
+            SET v_result = 'Khá';  -- Tự động hiểu là < 8.0 vì đã check ở trên
+        WHEN p_avg_score >= 5.0 THEN 
+            SET v_result = 'Trung bình'; -- Tự động hiểu là < 6.5
+        ELSE 
+            SET v_result = 'Yếu';
+    END CASE;
+
+    -- Gán kết quả từ biến trung gian vào tham số OUT để trả về
+    SET p_rank = v_result;
+
 END //
 
 DELIMITER ;
